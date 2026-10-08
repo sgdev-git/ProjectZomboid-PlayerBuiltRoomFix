@@ -58,7 +58,7 @@ Run from PowerShell:
 
 The script uses handwritten signature-only compile stubs so JDK 17 or newer can build the patch without redistributing Project Zomboid classes. It verifies the actual installed 42.21.0 method signatures with `javap`, runs behavior tests, and packages only `io.shaun.playerbuiltroomfix` classes.
 
-To exercise the compiled advice through the real ZombieBuddy 2.3.2 transformer in an isolated JVM, run:
+To exercise the compiled advice through the real ZombieBuddy 2.3.2 transformer in an isolated JVM, including loading and verifying the actual 42.21.0 target classes, run:
 
 ```powershell
 .\scripts\integration-test.ps1

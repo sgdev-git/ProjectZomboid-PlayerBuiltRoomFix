@@ -34,6 +34,16 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw "ZombieBuddy integration test failed with exit code $LASTEXITCODE."
     }
+
+    $ActualClasspath = @(
+        $IntegrationClasses,
+        (Join-Path $PzDir '*')
+    ) -join ';'
+    & $Java $AgentArgument '-Djava.awt.headless=true' '-classpath' $ActualClasspath `
+        'io.shaun.playerbuiltroomfix.ActualGameClassLoadSmokeTest'
+    if ($LASTEXITCODE -ne 0) {
+        throw "Actual 42.21.0 class-load smoke test failed with exit code $LASTEXITCODE."
+    }
 } finally {
     Pop-Location
 }
