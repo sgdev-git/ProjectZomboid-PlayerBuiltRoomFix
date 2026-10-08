@@ -71,7 +71,7 @@ Close Project Zomboid before installation. See [INSTALL.md](INSTALL.md) for the 
 At startup, successful discovery prints once:
 
 ```text
-[PlayerBuiltRoomFix] Installed IsoTree null-room guard and extension cutaway guard
+[PlayerBuiltRoomFix] v0.2.1 installed IsoTree null-room guard and extension cutaway guard
 ```
 
 ## Scope and limitations

@@ -17,7 +17,7 @@ getRoomID() == -1
 
 ## Cutaway patch
 
-`PlayerBuiltExtensionCutawayPatch` is an `OnExit` advice on the private FBO wall decision. It uses only the current camera square, the wall square, its north/west opposite square, and `IWorldRegion` identity.
+`PlayerBuiltExtensionCutawayPatch` is an `OnExit` advice on the private FBO wall decision. It uses only the current camera square, the wall square, its orientation-specific neighboring squares, and `IWorldRegion` identity. Build 42.21.0 can align a `CutawayWall` run one tile before the owning square on its opposite camera-facing side, so a conservative south/east fallback is used only when the owning and north/west squares have no normal `IsoRoom`.
 
 The affected-region test is intentionally narrow:
 
@@ -25,7 +25,7 @@ The affected-region test is intentionally narrow:
 2. its world region exists;
 3. that region is a player room;
 4. that region is fully roofed;
-5. exactly one side of the wall identifies a single affected region.
+5. exactly one unambiguous side of the wall identifies a single affected region.
 
 Exceptions preserve the vanilla return value. The render path performs no logging and allocates no collections.
 

@@ -38,6 +38,40 @@ public final class PlayerBuiltExtensionCutawayPatchTest {
             "outside affected region keeps the wall rendered"
         );
 
+        StubSquare forwardOwnedSide = new StubSquare(null, outside);
+        forwardOwnedSide.north = new StubSquare(null, outside);
+        forwardOwnedSide.south = new StubSquare(null, affected);
+        assertResult(
+            false,
+            PlayerBuiltExtensionCutawayPatch.resolveCutaway(
+                true, horizontal, forwardOwnedSide, new StubSquare(null, outside)
+            ),
+            "south-aligned affected region keeps the wall rendered while outside"
+        );
+        assertResult(
+            true,
+            PlayerBuiltExtensionCutawayPatch.resolveCutaway(
+                false, horizontal, forwardOwnedSide, new StubSquare(null, affected)
+            ),
+            "south-aligned affected region cuts the wall away while inside"
+        );
+
+        FBORenderCutaways.CutawayWall vertical = new FBORenderCutaways.CutawayWall();
+        vertical.x1 = 10;
+        vertical.x2 = 10;
+        vertical.y1 = 10;
+        vertical.y2 = 15;
+        StubSquare eastOwnedSide = new StubSquare(null, outside);
+        eastOwnedSide.west = new StubSquare(null, outside);
+        eastOwnedSide.east = new StubSquare(null, affected);
+        assertResult(
+            false,
+            PlayerBuiltExtensionCutawayPatch.resolveCutaway(
+                true, vertical, eastOwnedSide, new StubSquare(null, outside)
+            ),
+            "east-aligned affected region keeps the wall rendered while outside"
+        );
+
         StubSquare normalRoomSide = new StubSquare(new IsoRoom(), affected);
         normalRoomSide.north = outsideSide;
         assertResult(
@@ -87,6 +121,8 @@ public final class PlayerBuiltExtensionCutawayPatchTest {
         private final IsoRoom room;
         private final IWorldRegion region;
         private IsoGridSquare north;
+        private IsoGridSquare south;
+        private IsoGridSquare east;
         private IsoGridSquare west;
 
         private StubSquare(IsoRoom room, IWorldRegion region) {
@@ -106,7 +142,16 @@ public final class PlayerBuiltExtensionCutawayPatchTest {
 
         @Override
         public IsoGridSquare getAdjacentSquare(IsoDirections direction) {
-            return direction == IsoDirections.N ? north : west;
+            if (direction == IsoDirections.N) {
+                return north;
+            }
+            if (direction == IsoDirections.S) {
+                return south;
+            }
+            if (direction == IsoDirections.E) {
+                return east;
+            }
+            return west;
         }
     }
 

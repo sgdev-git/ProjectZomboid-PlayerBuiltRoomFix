@@ -75,6 +75,7 @@ Copy-Item -LiteralPath (Join-Path $ProjectRoot 'scripts\uninstall.ps1') -Destina
 $Record = @(
     'PlayerBuiltRoomFix installation record',
     "Installed: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss K')",
+    'Patch version: 0.2.1',
     'Project Zomboid: 42.21.0 revision 4a0e9546ec',
     'ZombieBuddy: 2.3.2',
     "Patch JAR SHA-256: $((Get-FileHash -LiteralPath $BuiltJar -Algorithm SHA256).Hash)",

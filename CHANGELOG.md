@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.1 - 2026-10-08
+
+- Handle the opposite camera-facing alignment of north/west `CutawayWall` runs by checking a conservative south/east fallback tile.
+- Preserve vanilla behavior when either primary square belongs to a normal `IsoRoom` or both primary sides identify player regions.
+
 ## 0.2.0 - 2026-10-08
 
 - Add a render-only wall-cutaway fallback for fully roofed player regions that have no `IsoRoom` in Project Zomboid 42.21.0.

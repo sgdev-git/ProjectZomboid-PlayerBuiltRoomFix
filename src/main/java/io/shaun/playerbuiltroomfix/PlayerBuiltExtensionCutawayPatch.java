@@ -84,24 +84,43 @@ public final class PlayerBuiltExtensionCutawayPatch {
         FBORenderCutaways.CutawayWall wall,
         IsoGridSquare wallSquare
     ) {
-        IsoGridSquare oppositeSquare = wall.y1 == wall.y2
-            ? wallSquare.getAdjacentSquare(IsoDirections.N)
-            : wallSquare.getAdjacentSquare(IsoDirections.W);
+        boolean horizontal = wall.y1 == wall.y2;
+        IsoGridSquare oppositeSquare = wallSquare.getAdjacentSquare(
+            horizontal ? IsoDirections.N : IsoDirections.W
+        );
 
         IWorldRegion nearRegion = getAffectedRegion(wallSquare);
         IWorldRegion farRegion = getAffectedRegion(oppositeSquare);
 
-        if (nearRegion == farRegion) {
-            return null;
-        }
-
-        // A wall between two different affected rooms is ambiguous. Preserve
-        // vanilla rather than joining or exposing either room visually.
+        // Both geometric sides resolving to a player region means this is an
+        // internal or otherwise ambiguous wall. Leave vanilla in control.
         if (nearRegion != null && farRegion != null) {
             return null;
         }
 
-        return nearRegion != null ? nearRegion : farRegion;
+        if (nearRegion != null) {
+            return nearRegion;
+        }
+        if (farRegion != null) {
+            return farRegion;
+        }
+
+        // CutawayWall coordinates can be aligned one tile before the owning
+        // square for the opposite camera-facing side of a wall run. Probe only
+        // that orientation-specific forward tile, and only when neither of the
+        // primary squares belongs to a normal IsoRoom.
+        if (hasIsoRoom(wallSquare) || hasIsoRoom(oppositeSquare)) {
+            return null;
+        }
+
+        IsoGridSquare forwardSquare = wallSquare.getAdjacentSquare(
+            horizontal ? IsoDirections.S : IsoDirections.E
+        );
+        return getAffectedRegion(forwardSquare);
+    }
+
+    private static boolean hasIsoRoom(IsoGridSquare square) {
+        return square != null && square.getRoom() != null;
     }
 
     private static IWorldRegion getAffectedRegion(IsoGridSquare square) {
